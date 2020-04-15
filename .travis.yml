@@ -1,0 +1,21 @@
+sudo: required
+services:
+        - docker
+
+before_install:
+        - docker build -t tsamuelk/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+        - docker run -e CI=true tsamuelk/react-test npm test 
+
+after_success:
+        - docker build -t tsamuelk/multi-client ./client
+        - docker build -t tsamuelk/multi-nginx ./nginx
+        - docker build -t tsamuelk/multi-server ./server
+        - docker build -t tsamuelk/multi-worker ./worker
+          
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+        - docker push tsamuelk/multi-client
+        - docker push tsamuelk/multi-nginx
+        - docker push tsamuelk/multi-server
+        - docker push tsamuelk/multi-worker

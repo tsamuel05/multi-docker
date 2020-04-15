@@ -19,3 +19,15 @@ after_success:
         - docker push tsamuelk/multi-nginx
         - docker push tsamuelk/multi-server
         - docker push tsamuelk/multi-worker
+deploy:
+	provider: elasticbeanstalk
+	region: eu-west-1
+	app: multi-docker-app
+        env: MultiDockerApp-env
+        bucket_name: elasticbeanstalk-eu-west-1-220551845484
+        bucket_path: docker-multi
+        on:
+                branch: master
+        access_key_id: $AWS_ACCESS_KEY
+        secret_access_key:
+                secure: $AWS_SECRET_KEY

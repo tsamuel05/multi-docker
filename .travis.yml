@@ -22,6 +22,7 @@ after_success:
   - docker push tsamuelk/multi-worker
 
 deploy:
+  edge: true 
   provider: elasticbeanstalk
   region: us-west-1
   app: multi-docker-app
